@@ -645,10 +645,10 @@ header {
     text-shadow: 0 0 10px var(--gold-glow);
 }
 
-/* SECCIÓN DE DIVULGACIÓN DE AFILIADOS - MÁS DISCRETA */
+/* SECCIÓN DE DIVULGACIÓN DE AFILIADOS - VISIBLE DIRECTAMENTE */
 #affiliate-disclosure {
-    padding: 30px 20px;
-    background: transparent;
+    padding: 40px 20px;
+    background: rgba(0, 0, 0, 0.2);
     border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -658,62 +658,44 @@ header {
     text-align: center;
 }
 
-.disclosure-toggle {
-    color: #666;
-    font-size: 0.75rem;
-    cursor: pointer;
-    text-decoration: underline;
-    transition: color 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.disclosure-toggle:hover {
-    color: var(--gold);
-}
-
-.disclosure-content {
-    display: none;
-    margin-top: 15px;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-    text-align: left;
-}
-
-.disclosure-content.active {
-    display: block;
-}
-
-.disclosure-content p {
-    margin: 0 0 10px;
-    color: #888;
+.disclosure-container p {
+    margin: 0 0 12px;
+    color: #777;
     font-size: 0.8rem;
-    line-height: 1.5;
+    line-height: 1.6;
 }
 
-.disclosure-content p:last-child {
+.disclosure-container p:last-child {
     margin-bottom: 0;
 }
 
-.disclosure-content strong {
-    color: #aaa;
+.disclosure-container strong {
+    color: #999;
 }
 
-/* Footer - Solo aviso de Amazon (obligatorio por contrato) */
+/* Footer */
 footer {
     text-align: center;
-    padding: 25px 20px;
+    padding: 30px 20px;
     background: #0a0a0f;
     border-top: 1px solid #222;
 }
 
 footer p {
-    margin: 0;
+    margin: 0 0 10px;
     color: #555;
+    font-size: 0.75rem;
+}
+
+.privacy-link {
+    color: #666;
+    text-decoration: none;
     font-size: 0.7rem;
-    line-height: 1.5;
+    transition: color 0.3s ease;
+}
+
+.privacy-link:hover {
+    color: var(--gold);
 }
 
 /* Responsive */
@@ -795,14 +777,10 @@ footer p {
     }
     
     #affiliate-disclosure {
-        padding: 20px 15px;
+        padding: 30px 15px;
     }
     
-    .disclosure-content {
-        padding: 15px;
-    }
-    
-    .disclosure-content p {
+    .disclosure-container p {
         font-size: 0.75rem;
     }
 }
