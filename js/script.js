@@ -11,10 +11,9 @@ const map = L.map('map', {
     maxBoundsViscosity: 1.0 
 });
 
-// Estilo de mapa oscuro
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+// Estilo de mapa calles
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    subdomains: 'abcd',
     maxZoom: 19,
     opacity: 0.9
 }).addTo(map);
