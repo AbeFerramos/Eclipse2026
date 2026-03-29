@@ -37,12 +37,13 @@ section[id] {
 .site-header {
     max-width: 1180px;
     margin: 0 auto;
-    padding: 24px 20px;
+    padding: 20px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 24px;
+    gap: 12px;
     border-bottom: 1px solid rgba(243, 156, 18, 0.2);
+    margin-bottom: 24px;
 }
 
 .logo-link {
@@ -50,7 +51,7 @@ section[id] {
 }
 
 .logo-img {
-    width: 150px;
+    width: 210px;
     height: auto;
     display: block;
     filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.5));
@@ -63,10 +64,35 @@ section[id] {
 
 .top-nav {
     display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
+    gap: 20px;
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: flex-end;
+    margin-left: 12px;
+}
+
+.menu-toggle {
+    display: none;
+    width: 44px;
+    height: 38px;
+    border: 1px solid rgba(243, 156, 18, 0.65);
+    border-radius: 10px;
+    background: rgba(243, 156, 18, 0.1);
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: #ffd08a;
+    border-radius: 999px;
+    transform-origin: center;
+    transition: transform 0.24s ease, opacity 0.2s ease;
 }
 
 .top-nav a {
@@ -76,7 +102,7 @@ section[id] {
     font-size: 0.92rem;
     border: 1px solid rgba(243, 156, 18, 0.35);
     border-radius: 999px;
-    padding: 8px 12px;
+    padding: 3px 10px;
     transition: all 0.2s ease;
 }
 
@@ -105,8 +131,8 @@ footer {
 }
 
 .hero-section {
-    padding-top: 20px;
-    padding-bottom: 24px;
+    padding-top: 26px;
+    padding-bottom: 30px;
     background:
         radial-gradient(circle at 50% 0%, rgba(243, 156, 18, 0.1), transparent 46%);
     border-radius: 16px;
@@ -123,10 +149,11 @@ footer {
 
 .hero-copy h1 {
     margin: 8px 0 12px;
-    font-size: clamp(1.8rem, 3.4vw, 3rem);
+    font-size: clamp(1.5rem, 2.65vw, 2.6rem);
     line-height: 1.15;
     color: var(--sun);
     text-shadow: 0 0 24px rgba(243, 156, 18, 0.42);
+    white-space: nowrap;
 }
 
 .hero-copy p,
@@ -229,8 +256,8 @@ footer {
 }
 
 #info-panel {
-    padding-top: 24px;
-    padding-bottom: 10px;
+    padding-top: 30px;
+    padding-bottom: 16px;
 }
 
 .info-card {
@@ -336,8 +363,8 @@ footer {
 
 .travel-guide-section,
 .content-section {
-    padding-top: 34px;
-    padding-bottom: 10px;
+    padding-top: 40px;
+    padding-bottom: 14px;
 }
 
 .section-title {
@@ -605,26 +632,63 @@ footer p {
 
 @media (max-width: 760px) {
     .site-header {
-        flex-direction: column;
-        align-items: flex-start;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        row-gap: 10px;
+        margin-bottom: 16px;
+    }
+
+    .menu-toggle {
+        display: inline-flex;
     }
 
     .top-nav {
+        display: flex;
+        grid-column: 1 / -1;
         width: 100%;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        gap: 10px;
-        padding-bottom: 4px;
+        flex-wrap: wrap;
+        gap: 9px;
+        margin-left: 0;
+        justify-content: flex-start;
+        padding: 0;
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        transform: translateY(-8px);
+        pointer-events: none;
+        transition: max-height 0.28s ease, opacity 0.22s ease, transform 0.22s ease, padding 0.22s ease;
+    }
+
+    .site-header.menu-open .top-nav {
+        max-height: 260px;
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+        padding: 10px 0 2px;
+    }
+
+    .site-header.menu-open .menu-toggle span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+
+    .site-header.menu-open .menu-toggle span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .site-header.menu-open .menu-toggle span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
     }
 
     .top-nav a {
-        white-space: nowrap;
-        font-size: 0.88rem;
-        padding: 7px 11px;
+        white-space: normal;
+        font-size: 0.82rem;
+        line-height: 1.2;
+        padding: 5px 9px;
     }
 
     .logo-img {
-        width: 126px;
+        width: 148px;
     }
 
     #map {
@@ -641,5 +705,9 @@ footer p {
 
     .section-title {
         font-size: 1.45rem;
+    }
+
+    .hero-copy h1 {
+        white-space: normal;
     }
 }
