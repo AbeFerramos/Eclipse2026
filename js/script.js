@@ -1,134 +1,160 @@
-// CONFIGURACIÓN INICIAL DEL MAPA
-const map = L.map('map', {
+﻿const map = L.map('map', {
     center: [40.0, -3.5],
     zoom: 6,
     minZoom: 5,
     maxZoom: 10,
-    maxBounds: [
-        [35.0, -12.0], 
-        [44.5, 5.0]    
-    ],
-    maxBoundsViscosity: 1.0 
+    maxBounds: [[35.0, -12.0], [44.5, 5.0]],
+    maxBoundsViscosity: 1.0
 });
 
-// Estilo de mapa calles
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    maxZoom: 19,
-    opacity: 0.9
+const primaryLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    opacity: 0.9,
+    maxZoom: 19
 }).addTo(map);
+
+const fallbackLayer = L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    opacity: 0.9,
+    subdomains: 'abc',
+    maxZoom: 20
+});
+
+let usingFallbackLayer = false;
+primaryLayer.on('tileerror', () => {
+    if (usingFallbackLayer) {
+        return;
+    }
+
+    usingFallbackLayer = true;
+    map.removeLayer(primaryLayer);
+    fallbackLayer.addTo(map);
+
+    const note = document.querySelector('.map-disclaimer');
+    if (note) {
+        note.innerText = 'El servidor principal de mapa ha limitado el acceso. Mostramos una capa alternativa visualmente similar.';
+    }
+});
 
 const TOTALITY_NORTH = 43.6;
 const TOTALITY_SOUTH = 39.5;
+const BOOKING_AID = '4347393';
+const CHECKIN_DATE = '2026-08-11';
+const CHECKOUT_DATE = '2026-08-13';
 
-// --- CONFIGURACIÓN DE AFILIADO ---
-const BOOKING_AID = 'TU_ID_AQUI'; // Pon aquí tu ID de afiliado cuando lo tengas
+function buildBookingUrl(cityName) {
+    return `https://www.booking.com/searchresults.es.html?ss=${encodeURIComponent(cityName)}&checkin=${CHECKIN_DATE}&checkout=${CHECKOUT_DATE}&group_adults=2&no_rooms=1&aid=${BOOKING_AID}`;
+}
 
-// 1. CONTADOR DE TIEMPO
-const eclipseDate = new Date('August 12, 2026 20:00:00').getTime();
-setInterval(() => {
-    const now = new Date().getTime();
-    const d = eclipseDate - now;
-    if (d > 0) {
-        document.getElementById('days').innerText = Math.floor(d / (1000 * 60 * 60 * 24)).toString().padStart(3, '0');
-        document.getElementById('hours').innerText = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
-        document.getElementById('minutes').innerText = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
-        document.getElementById('seconds').innerText = Math.floor((d % (1000 * 60)) / 1000).toString().padStart(2, '0');
+function setBookingLinks(cityName) {
+    const mainButton = document.getElementById('btn-hotel');
+    if (mainButton) {
+        mainButton.href = buildBookingUrl(cityName);
     }
+
+    const cityLinks = document.querySelectorAll('.booking-link');
+    cityLinks.forEach((link) => {
+        const city = link.dataset.city || cityName;
+        link.href = buildBookingUrl(city);
+    });
+}
+
+const eclipseDate = new Date('2026-08-12T20:00:00+02:00').getTime();
+setInterval(() => {
+    const now = Date.now();
+    const diff = eclipseDate - now;
+
+    if (diff <= 0) {
+        document.getElementById('days').innerText = '000';
+        document.getElementById('hours').innerText = '00';
+        document.getElementById('minutes').innerText = '00';
+        document.getElementById('seconds').innerText = '00';
+        return;
+    }
+
+    document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(3, '0');
+    document.getElementById('hours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+    document.getElementById('minutes').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+    document.getElementById('seconds').innerText = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
 }, 1000);
 
-// 2. FUNCIÓN PARA ACTUALIZAR LA INTERFAZ Y EL BOTÓN
-function updateUI(lat, lng, cityName = "Punto seleccionado", comingFromMap = false) {
-    // Cálculo de cobertura
-    let cob = 0;
+function updateUI(lat, lng, cityName) {
+    let coverage = 0;
+
     if (lat < TOTALITY_NORTH && lat > TOTALITY_SOUTH) {
-        cob = 100;
+        coverage = 100;
     } else {
         const dist = Math.min(Math.abs(lat - TOTALITY_NORTH), Math.abs(lat - TOTALITY_SOUTH));
-        cob = Math.max(50, Math.floor(100 - (dist * 12)));
+        coverage = Math.max(50, Math.floor(100 - (dist * 12)));
     }
 
-    // Actualizar datos en el panel
     document.getElementById('city-name').innerText = cityName;
     document.getElementById('coords').innerText = `Lat: ${lat.toFixed(2)} | Lon: ${lng.toFixed(2)}`;
-    document.getElementById('percent-text').innerText = `${cob}% Cobertura`;
-    document.getElementById('eclipse-type').innerText = cob === 100 ? "TIPO: TOTAL 🌑" : "TIPO: PARCIAL 🌗";
-    
-    const moon = document.getElementById('moon');
-    if (moon) moon.style.left = `${100 - cob}%`;
-    
-    // --- LÓGICA DEL BOTÓN Y MENSAJE ---
-    const btnHotel = document.getElementById('btn-hotel');
-    const helpText = document.querySelector('.small-text');
-    
-    // Generar enlace dinámico para Booking
-    const hotelUrl = `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(cityName)}&dest_type=latlng&latitude=${lat}&longitude=${lng}&checkin=2026-08-11&checkout=2026-08-13&aid=${BOOKING_AID}`;
-    btnHotel.href = hotelUrl;
+    document.getElementById('percent-text').innerText = `${coverage}% cobertura`;
+    document.getElementById('eclipse-type').innerText = coverage === 100 ? 'TOTAL' : 'PARCIAL';
 
-    // Cambiar mensaje si el usuario clica en el mapa
-    if (comingFromMap) {
-        helpText.innerHTML = "✨ <b>¿Buscas hotel en esta zona?</b> Clica en Buscar hotel";
-        helpText.style.color = "#f39c12"; // Dorado para llamar la atención
-    } else {
-        helpText.innerText = "Reserva pronto, la ocupación será alta.";
-        helpText.style.color = "#888";
+    const moon = document.getElementById('moon');
+    if (moon) {
+        moon.style.left = `${100 - coverage}%`;
+    }
+
+    setBookingLinks(cityName);
+}
+
+let tempMarker = null;
+map.on('click', (e) => {
+    if (tempMarker) {
+        map.removeLayer(tempMarker);
+    }
+
+    tempMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+    L.popup()
+        .setLatLng(e.latlng)
+        .setContent('<b>Ubicacion seleccionada</b><br>Consulta los detalles en el panel inferior')
+        .openOn(map);
+
+    updateUI(e.latlng.lat, e.latlng.lng, 'Punto seleccionado');
+});
+
+async function findCity() {
+    const cityInput = document.getElementById('city-input');
+    const city = cityInput.value.trim();
+
+    if (!city) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(`${city}, Spain`)}`);
+        const data = await response.json();
+
+        if (!data[0]) {
+            alert('No encontramos esa ciudad. Prueba con otra busqueda.');
+            return;
+        }
+
+        const { lat, lon, display_name } = data[0];
+        const parsedLat = parseFloat(lat);
+        const parsedLon = parseFloat(lon);
+        const name = display_name.split(',')[0];
+
+        map.flyTo([parsedLat, parsedLon], 10);
+        if (tempMarker) {
+            map.removeLayer(tempMarker);
+        }
+        tempMarker = L.marker([parsedLat, parsedLon]).addTo(map);
+
+        updateUI(parsedLat, parsedLon, name);
+    } catch (error) {
+        alert('Ha ocurrido un error en la busqueda. Intentalo de nuevo en unos segundos.');
     }
 }
 
-// 3. EVENTO DE CLIC EN EL MAPA
-let tempMarker = null;
-
-map.on('click', e => {
-    if (tempMarker) map.removeLayer(tempMarker);
-    
-    // Marcador visual
-    tempMarker = L.circleMarker([e.latlng.lat, e.latlng.lng], {
-        radius: 6,
-        fillColor: '#fff',
-        color: '#f39c12',
-        weight: 3,
-        fillOpacity: 0.8
-    }).addTo(map);
-    
-    // POPUP EN EL MAPA: Lo que pediste
-    L.popup()
-        .setLatLng([e.latlng.lat, e.latlng.lng])
-        .setContent("<b>¿Buscas hotel aquí?</b><br>Usa el botón del panel")
-        .openOn(map);
-    
-    // Actualizar UI del panel lateral
-    updateUI(e.latlng.lat, e.latlng.lng, "Punto en el mapa", true);
+document.getElementById('search-button').addEventListener('click', findCity);
+document.getElementById('city-input').addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        findCity();
+    }
 });
 
-// 4. BUSCADOR DE CIUDADES
-document.getElementById('search-button').onclick = () => {
-    const city = document.getElementById('city-input').value;
-    if (!city) return;
-    
-    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}, Spain`)
-        .then(r => r.json())
-        .then(data => {
-            if(data[0]) {
-                const { lat, lon, display_name } = data[0];
-                const l = parseFloat(lat), ln = parseFloat(lon);
-                
-                map.flyTo([l, ln], 10, { duration: 1.5 });
-                
-                if (tempMarker) map.removeLayer(tempMarker);
-                tempMarker = L.marker([l, ln]).addTo(map);
-                
-                const shortName = display_name.split(',')[0];
-                updateUI(l, ln, shortName, false); // Falso porque es búsqueda, no clic directo
-            } else {
-                alert("No se encontró la ubicación.");
-            }
-        });
-};
-
-// Enter en el buscador
-document.getElementById('city-input').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') document.getElementById('search-button').click();
-});
-
-// Inicialización
-updateUI(42.34, -3.70, "Burgos", false);
+updateUI(42.34, -3.70, 'Burgos');
