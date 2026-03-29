@@ -1,123 +1,299 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eclipse Solar 2026 | Simulador Premium</title>
-    
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Guia de Viaje Eclipse Solar 2026 en Espana | Weclipse</title>
+    <meta name="description" content="Guia completa para viajar y ver el eclipse solar total del 12 de agosto de 2026 en Espana: mejores destinos, hoteles, transporte, presupuesto y consejos de seguridad.">
+    <meta name="robots" content="index,follow,max-image-preview:large">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Guia de Viaje Eclipse Solar 2026 en Espana | Weclipse">
+    <meta property="og:description" content="Planifica tu viaje para el eclipse de 2026 con destinos recomendados, mapas, checklist y comparador de alojamientos.">
+    <meta property="og:image" content="img/logo.png">
+    <meta property="og:locale" content="es_ES">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Guia de Viaje Eclipse Solar 2026 en Espana | Weclipse">
+    <meta name="twitter:description" content="Contenido de viaje actualizado para organizar tu escapada astronomica en 2026.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Weclipse",
+      "inLanguage": "es",
+      "description": "Guia de viaje para el eclipse solar total de agosto de 2026 en Espana"
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Cuando es el eclipse solar total en Espana?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "El eclipse solar total sera el 12 de agosto de 2026 por la tarde, con variaciones segun la ciudad."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Que ciudad tiene buena combinacion de totalidad y servicios?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Burgos y zonas del norte interior suelen combinar buena visibilidad potencial, accesos por carretera y oferta de alojamiento."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Es obligatorio usar gafas homologadas para observar el eclipse?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Si. Debes usar gafas con certificacion ISO 12312-2 durante las fases parciales para evitar danos oculares."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <header class="site-header">
+        <a href="#" class="logo-link" aria-label="Inicio Weclipse">
+            <img src="img/logo.png" alt="Weclipse, guia de viaje eclipse 2026" class="logo-img">
+        </a>
+        <nav class="top-nav" aria-label="Navegacion principal">
+            <a href="index.html" aria-current="page">Inicio</a>
+            <a href="destinos-eclipse-2026-espana.html">Destinos</a>
+            <a href="presupuesto-viaje-eclipse-2026.html">Presupuesto</a>
+            <a href="fotografia-eclipse-movil.html">Fotografia</a>
+            <a href="sobre-nosotros-contacto.html">Nosotros</a>
+            <a href="privacidad.html">Privacidad</a>
+        </nav>
+    </header>
 
-    <section class="hero-section">
-        <div class="logo-container">
-            <a href="#" class="logo-link">
-                <img src="img/logo.png" alt="Eclipse Solar 2026" class="logo-img">
-            </a>
-        </div>
+    <main>
+        <section class="hero-section" id="simulador">
+            <div class="hero-copy">
+                <p class="hero-kicker">Viaje Astronomico 2026</p>
+                <h1>Eclipse Solar Total del 12 de agosto de 2026 en Espana</h1>
+                <p>Publicamos guias practicas para ayudarte a elegir destino, reservar alojamiento y observar el eclipse con seguridad.</p>
+            </div>
 
-        <header>
-            <h1 class="main-title">Eclipse Solar 12 de Agosto, 2026</h1>
-            <div id="countdown-container">
-                <div class="time-unit"><span id="days">000</span><p>Días</p></div>
-                <div class="time-unit"><span id="hours">00</span><p>Hs</p></div>
+            <div id="countdown-container" aria-label="Cuenta atras al eclipse">
+                <div class="time-unit"><span id="days">000</span><p>Dias</p></div>
+                <div class="time-unit"><span id="hours">00</span><p>Horas</p></div>
                 <div class="time-unit"><span id="minutes">00</span><p>Min</p></div>
                 <div class="time-unit"><span id="seconds">00</span><p>Seg</p></div>
             </div>
-        </header>
 
-        <div class="search-wrapper">
-            <div class="search-bar">
-                <input type="text" id="city-input" placeholder="Busca tu ciudad en España...">
-                <button id="search-button">Buscar</button>
-            </div>
-        </div>
-
-        <div id="map"></div>
-        <p class="map-disclaimer">* Reservando desde este mapa ayudas a mantener este proyecto sin coste extra para ti.</p>
-    </section>
-
-    <section id="info-panel">
-        <div class="info-card">
-            <div class="city-details">
-                <h2 id="city-name">Burgos</h2>
-                <p>Tipo: <span id="eclipse-type" class="highlight-text">TOTAL</span> ●</p>
-                <p id="coords" class="sub-text">Clica para coordenadas</p>
-                <div class="safety-tag">⚠️ SEGURIDAD ANTE TODO</div>
-            </div>
-
-            <div class="simulation-view">
-                <div class="sun-ring">
-                    <div id="moon"></div>
+            <div class="search-wrapper">
+                <label for="city-input" class="sr-only">Buscar ciudad</label>
+                <div class="search-bar">
+                    <input type="text" id="city-input" placeholder="Busca una ciudad de Espana...">
+                    <button id="search-button" type="button">Buscar</button>
                 </div>
-                <h3 id="percent-text">100% Cobertura</h3>
             </div>
 
-            <div class="action-links">
-    <a href="#" id="btn-hotel" class="link-item" target="_blank">🏨 Buscar Hotel</a>
-    <a href="#shop-section" class="link-item">🕶️ Comprar Gafas</a>
-    <p class="small-text">Reserva pronto, la ocupación será alta.</p>
-</div>
-        </div>
-    </section>
+            <div id="map" aria-label="Mapa del eclipse en Espana"></div>
+            <p class="map-disclaimer">Comparador de alojamientos integrado para fechas del eclipse. Sin coste extra para el usuario.</p>
+        </section>
 
-    <section id="shop-section">
-        <h2 class="section-title">Tienda del Eclipse</h2>
-        <p class="iso-notice">🔒 Todos los productos incluyen filtros certificados ISO 12312-2 para proteger tu vista y la lente de tu móvil</p>
-        
-        <div class="products-grid">
-            <div class="product-card">
-                <div class="badge">MÁS VENDIDO</div>
-                <img src="img/gafas.jpg" alt="Gafas Eclipse Solar Certificadas">
-                <h3>Gafas Eclipse Solar Certificadas</h3>
-                <p class="product-desc">Gafas homologadas con filtro solar certificado ISO 12312-2 para observación segura del eclipse del 12 de agosto de 2026.</p>
-                <a href="https://www.amazon.es/Pack-gafas-Eclipse-certificado-ISO/dp/B01NB09NHK?__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=HTA8430O14KJ&dib=eyJ2IjoiMSJ9.OjA0xXBVlmUaIC_lKainZ51vyMd7iTkI0oTSPcR6NxGWX4ebyarLfL1xB61ccxBli2ArZH03SDzm4qSyVWoYnike2ZvDUFJ_Q-nu8hAikX3-j58AuWNdqE64qWZMzeHXjDHUNFNaxJEQEUNdouZaWzI1CqKXgRtVauIAzYTXJ9W1Wr0cPq2SNlwu8ETtfA066Ybo8_fnMDDmvv1FhFczAmpehoOm0vfk-CFjDucyrT8RJhXuy7QCP5gEdoF-KdneF2yMdFxbcBrKppzpLyBNOQfjwHukQtQKjapFfXJQmr0.GzeJpw9qy-7f5FQGktvods0mIZZ1_2IXaxFm25CV8fI&dib_tag=se&keywords=Gafas+para+Eclipse+Solar+%E2%80%93&qid=1772019965&sprefix=gafas+para+eclipse+solar+%2Caps%2C353&sr=8-1-spons&aref=zC9COQR3F6&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&psc=1&linkCode=ll2&tag=abri02b-21&linkId=818b234c9f7642ca9e72c2a1eade05c5&ref_=as_li_ss_tl" 
-                   class="btn-amazon" 
-                   target="_blank" 
-                   rel="sponsored noopener noreferrer"
-                   onclick="trackAffiliateClick('gafas-certificadas')">
-                    Ver en Amazon
-                </a>
-            </div>
-            
-            <div class="product-card featured">
-                <div class="badge">RECOMENDADO</div>
-                <img src="img/filtro.jpg" alt="Celestron EclipSmart Filtro Solar">
-                <h3>Celestron EclipSmart Filtro Solar</h3>
-                <p class="product-desc">Filtro solar certificado ISO 12312-2 para smartphone y telescopio. Observa y fotografía el eclipse con total seguridad.</p>
-                <a href="https://www.amazon.es/Celestron-94243-EclipSmart-Eclipse-telescopio/dp/B071DVRM17?th=1&linkCode=ll2&tag=abri02b-21&linkId=75e42ff7d810eb0f3e7552933b73cd5b&ref_=as_li_ss_tl" 
-                   class="btn-amazon" 
-                   target="_blank" 
-                   rel="sponsored noopener noreferrer"
-                   onclick="trackAffiliateClick('filtro-celestron')">
-                    Ver en Amazon
-                </a>
-            </div>
-        </div>
-        
-        <div class="more-products">
-            <p>¿Necesitas más opciones?</p>
-            <a href="https://www.amazon.es/s?k=gafas+eclipse+solar+iso+12312-2&linkCode=ll2&tag=abri02b-21&linkId=de9a90133a0a469582a4ef6c289d8901&ref_=as_li_ss_tl" 
-               target="_blank" 
-               rel="sponsored noopener noreferrer"
-               class="link-more">
-                Ver todos los productos para el eclipse en Amazon →
-            </a>
-        </div>
-    </section>
+        <section id="info-panel">
+            <article class="info-card">
+                <div class="city-details">
+                    <h2 id="city-name">Burgos</h2>
+                    <p>Tipo de eclipse: <span id="eclipse-type" class="highlight-text">TOTAL</span></p>
+                    <p id="coords" class="sub-text">Lat: -- | Lon: --</p>
+                    <div class="safety-tag">Seguridad ocular siempre prioritaria</div>
+                </div>
 
-    <section id="affiliate-disclosure">
-        <div class="disclosure-container">
-            <p><strong>Amazon:</strong> Como afiliado de Amazon, percibo ingresos por las compras adscritas que cumplen los requisitos aplicables.</p>
-            <p><strong>Booking:</strong> Algunos de los enlaces en esta web son enlaces de afiliado. Esto significa que si reservas un hotel a través de ellos, yo recibo una pequeña comisión sin que a ti te cueste ni un céntimo de más. ¡Gracias por tu apoyo!</p>
-        </div>
-    </section>
+                <div class="simulation-view" aria-label="Simulacion de cobertura solar">
+                    <div class="sun-ring">
+                        <div id="moon"></div>
+                    </div>
+                    <h3 id="percent-text">100% cobertura</h3>
+                </div>
+
+                <div class="action-links">
+                    <a href="#" id="btn-hotel" class="link-item" target="_blank" rel="nofollow sponsored noopener">Reservar hotel en Booking</a>
+                    <a href="#shop-section" class="link-item">Comprar gafas homologadas</a>
+                    <p class="small-text">Actualizamos esta guia de forma periodica hasta agosto de 2026.</p>
+                </div>
+            </article>
+        </section>
+
+        <section class="travel-guide-section" id="destinos">
+            <h2 class="section-title">Destinos Recomendados Para Ver el Eclipse</h2>
+            <p class="section-intro">Seleccion de lugares con buena combinacion de visibilidad potencial, accesibilidad y servicios turisticos.</p>
+            <div class="destinations-grid">
+                <article class="dest-card-travel">
+                    <div class="dest-img-travel" style="background-image: url('img/burgos.jpg');"></div>
+                    <div class="dest-content-travel">
+                        <h3>Burgos: referencia para totalidad</h3>
+                        <p>Buen equilibrio entre ubicacion, carreteras, hoteles y puntos de observacion amplios en las afueras.</p>
+                        <a class="mini-link booking-link" data-city="Burgos" href="#" target="_blank" rel="nofollow sponsored noopener">Buscar hoteles en Burgos</a>
+                    </div>
+                </article>
+                <article class="dest-card-travel">
+                    <div class="dest-img-travel" style="background-image: url('img/gijon.jpg');"></div>
+                    <div class="dest-content-travel">
+                        <h3>Gijon: eclipse junto al mar</h3>
+                        <p>Buena opcion para combinar viaje de costa y experiencia astronomica en un entorno urbano con servicios.</p>
+                        <a class="mini-link booking-link" data-city="Gijon" href="#" target="_blank" rel="nofollow sponsored noopener">Buscar hoteles en Gijon</a>
+                    </div>
+                </article>
+                <article class="dest-card-travel">
+                    <div class="dest-img-travel" style="background-image: url('img/soria.jpg');"></div>
+                    <div class="dest-content-travel">
+                        <h3>Soria y entorno rural</h3>
+                        <p>Menor contaminacion luminica y alternativas de casas rurales para grupos o familias.</p>
+                        <a class="mini-link booking-link" data-city="Soria" href="#" target="_blank" rel="nofollow sponsored noopener">Buscar alojamientos en Soria</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="content-section" id="planificacion">
+            <h2 class="section-title">Planificacion de Viaje: 3 Pasos</h2>
+            <div class="content-grid">
+                <article class="content-card">
+                    <h3>1. Elige base de alojamiento</h3>
+                    <p>Reserva con antelacion en ciudades bien conectadas y con plan B por si cambia la prediccion meteorologica.</p>
+                </article>
+                <article class="content-card">
+                    <h3>2. Define punto de observacion</h3>
+                    <p>Evita zonas con arbolado denso u horizonte tapado. Llega con tiempo para evitar trafico y saturacion.</p>
+                </article>
+                <article class="content-card">
+                    <h3>3. Prepara seguridad y equipo</h3>
+                    <p>Incluye gafas ISO 12312-2, agua, gorra, bateria externa y rutas alternativas de regreso.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2 class="section-title">Accesos Rapidos</h2>
+            <div class="guide-links-grid">
+                <article class="guide-link-card">
+                    <h3>Simulador y mapa</h3>
+                    <p>Consulta cobertura estimada por ciudad y accede al comparador de alojamientos.</p>
+                    <a href="#simulador" class="mini-link">Ir al simulador</a>
+                </article>
+                <article class="guide-link-card">
+                    <h3>Planificacion de viaje</h3>
+                    <p>Revisa pasos clave para organizar transporte, horarios y punto de observacion.</p>
+                    <a href="#planificacion" class="mini-link">Ir a planificacion</a>
+                </article>
+                <article class="guide-link-card">
+                    <h3>Preguntas frecuentes</h3>
+                    <p>Respuestas rapidas sobre reservas, seguridad y preparacion del eclipse.</p>
+                    <a href="#faq" class="mini-link">Ir a FAQ</a>
+                </article>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2 class="section-title">Checklist de Equipaje Para el Eclipse</h2>
+            <ul class="checklist">
+                <li>Gafas homologadas ISO 12312-2 para cada persona</li>
+                <li>Proteccion solar y agua para 4-6 horas</li>
+                <li>Movil con mapas offline y bateria externa</li>
+                <li>Ropa ligera para tarde y abrigo fino para la noche</li>
+                <li>Plan de salida alternativo para evitar atascos</li>
+            </ul>
+        </section>
+
+        <section class="content-section" id="shop-section">
+            <h2 class="section-title">Equipo Recomendado</h2>
+            <p class="iso-notice">Seleccionamos productos utiles para observar y fotografiar el eclipse con seguridad.</p>
+            <div class="products-grid">
+                <article class="product-card">
+                    <div class="badge">Top ventas</div>
+                    <img src="img/gafas.jpg" alt="Gafas certificadas para eclipse solar">
+                    <h3>Gafas Eclipse Solar (2 unidades)</h3>
+                    <p class="product-desc">Proteccion para observacion directa en fases parciales.</p>
+                    <a href="https://www.amazon.es/dp/B01NB09NHK?tag=abri02b-21" class="btn-amazon" target="_blank" rel="nofollow sponsored noopener">Ver en Amazon</a>
+                </article>
+
+                <article class="product-card featured">
+                    <div class="badge">Recomendado</div>
+                    <img src="img/filtro.jpg" alt="Filtro solar para fotografia movil">
+                    <h3>Filtro Solar para Smartphone</h3>
+                    <p class="product-desc">Ayuda a capturar fotos del eclipse reduciendo riesgos para el sensor.</p>
+                    <a href="https://www.amazon.es/dp/B071DVRM17?tag=abri02b-21" class="btn-amazon" target="_blank" rel="nofollow sponsored noopener">Ver en Amazon</a>
+                </article>
+            </div>
+        </section>
+
+        <section class="content-section" id="faq">
+            <h2 class="section-title">Preguntas Frecuentes</h2>
+            <div class="faq-list">
+                <article class="faq-item">
+                    <h3>Con cuanta antelacion conviene reservar?</h3>
+                    <p>Lo recomendable es reservar entre 3 y 6 meses antes porque los precios suben cuando se acerca la fecha.</p>
+                </article>
+                <article class="faq-item">
+                    <h3>Se puede mirar el eclipse sin gafas en algun momento?</h3>
+                    <p>Solo durante la totalidad completa. En cualquier fase parcial debes usar proteccion certificada.</p>
+                </article>
+                <article class="faq-item">
+                    <h3>Publicais contenido nuevo antes del evento?</h3>
+                    <p>Si. Actualizamos destinos, consejos logisticos y estimaciones de ocupacion periodicamente.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="content-section about-section">
+            <h2 class="section-title">Sobre Weclipse</h2>
+            <p>Proyecto editorial independiente centrado en turismo astronomico y observacion segura de eclipses en Espana. Revisamos contenidos de forma manual y actualizamos guias con enfoque practico para viajeros.</p>
+        </section>
+
+        <section class="content-section">
+            <h2 class="section-title">Guias Editoriales Recomendadas</h2>
+            <div class="guide-links-grid">
+                <article class="guide-link-card">
+                    <h3>Mejores destinos para el eclipse 2026</h3>
+                    <p>Analisis por zonas, pros y contras de cada ciudad y enlaces para comparar alojamientos.</p>
+                    <a href="destinos-eclipse-2026-espana.html" class="mini-link">Leer guia de destinos</a>
+                </article>
+                <article class="guide-link-card">
+                    <h3>Presupuesto realista para 2 personas</h3>
+                    <p>Estimaciones de alojamiento, transporte y comidas para planificar sin sorpresas.</p>
+                    <a href="presupuesto-viaje-eclipse-2026.html" class="mini-link">Leer guia de presupuesto</a>
+                </article>
+                <article class="guide-link-card">
+                    <h3>Como fotografiar el eclipse con movil</h3>
+                    <p>Equipo minimo recomendado, ajustes basicos y errores que debes evitar.</p>
+                    <a href="fotografia-eclipse-movil.html" class="mini-link">Leer guia de fotografia</a>
+                </article>
+            </div>
+        </section>
+
+        <section id="affiliate-disclosure">
+            <div class="disclosure-container">
+                <p><strong>Transparencia afiliada:</strong> algunos enlaces son de afiliacion. Si reservas o compras desde ellos, podemos recibir una comision sin coste extra para ti.</p>
+                <p><strong>Compromiso editorial:</strong> priorizamos utilidad real para el viajero, independencia en recomendaciones y actualizaciones periodicas de contenido.</p>
+            </div>
+        </section>
+    </main>
 
     <footer>
-        <p>© 2026 Weclipse - Todos los derechos reservados</p>
-        <a href="privacidad.html" class="privacy-link">Política de Privacidad</a>
+        <p>Copyright 2026 Weclipse. Guia de viaje para el eclipse solar en Espana.</p>
+        <p>
+            <a href="destinos-eclipse-2026-espana.html" class="privacy-link">Destinos</a> |
+            <a href="presupuesto-viaje-eclipse-2026.html" class="privacy-link">Presupuesto</a> |
+            <a href="fotografia-eclipse-movil.html" class="privacy-link">Fotografia</a> |
+            <a href="sobre-nosotros-contacto.html" class="privacy-link">Nosotros</a>
+        </p>
+        <a href="privacidad.html" class="privacy-link">Politica de privacidad y afiliacion</a>
     </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
