@@ -657,6 +657,10 @@ footer p {
         overflow: hidden;
         transform: translateY(-8px);
         pointer-events: none;
+        border: 1px solid transparent;
+        border-radius: 12px;
+        background: rgba(10, 14, 22, 0.35);
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
         transition: max-height 0.28s ease, opacity 0.22s ease, transform 0.22s ease, padding 0.22s ease;
     }
 
@@ -666,6 +670,9 @@ footer p {
         transform: translateY(0);
         pointer-events: auto;
         padding: 10px 0 2px;
+        border-color: rgba(243, 156, 18, 0.35);
+        background: rgba(12, 18, 28, 0.92);
+        box-shadow: 0 14px 28px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(243, 156, 18, 0.12) inset;
     }
 
     .site-header.menu-open .menu-toggle span:nth-child(1) {
