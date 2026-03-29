@@ -110,7 +110,7 @@ map.on('click', (e) => {
     tempMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
     L.popup()
         .setLatLng(e.latlng)
-        .setContent('<b>Ubicacion seleccionada</b><br>Consulta los detalles en el panel inferior')
+        .setContent('<b>Ubicación seleccionada</b><br>Consulta los detalles en el panel inferior')
         .openOn(map);
 
     updateUI(e.latlng.lat, e.latlng.lng, 'Punto seleccionado');
@@ -129,7 +129,7 @@ async function findCity() {
         const data = await response.json();
 
         if (!data[0]) {
-            alert('No encontramos esa ciudad. Prueba con otra busqueda.');
+            alert('No encontramos esa ciudad. Prueba con otra búsqueda.');
             return;
         }
 
@@ -146,7 +146,7 @@ async function findCity() {
 
         updateUI(parsedLat, parsedLon, name);
     } catch (error) {
-        alert('Ha ocurrido un error en la busqueda. Intentalo de nuevo en unos segundos.');
+        alert('Ha ocurrido un error en la búsqueda. Inténtalo de nuevo en unos segundos.');
     }
 }
 
@@ -158,3 +158,6 @@ document.getElementById('city-input').addEventListener('keydown', (event) => {
 });
 
 updateUI(42.34, -3.70, 'Burgos');
+
+
+
